@@ -288,7 +288,7 @@ function ProductList() {
     setShowCart(false);
   };
   const [addedToCart, setAddedToCart] = useState({});
-  const handleAddToCart = (product, index, plantIndex) => {
+  const handleAddToCart = (product) => {
     //plantsArray[index].plants[plantIndex].added = true;    
     dispatch(addItem(product));
     setAddedToCart((prevState) => ({
@@ -298,7 +298,14 @@ function ProductList() {
     //updateButtons(index, plantIndex);
   };
 
-  const findItem = (name) => {
+  const handleOnDeleteFromCart = (plant) => {
+    setAddedToCart((prevState) => ({
+        ...prevState,
+        [plant.name]: false,
+    }));
+};
+
+  /*const findItem = (name) => {
     let found = false;
     if(addedToCart ) {
         Object.entries(addedToCart).map(([key, value]) => {
@@ -309,7 +316,7 @@ function ProductList() {
         });
     }
     return found;
-  }
+  }*/
 
   return (
     <div>
@@ -371,7 +378,7 @@ function ProductList() {
               </h1>
               <div className="product-list">
                 {category.plants.map((plant, plantIndex) => {
-                    const inCart = findItem(plant.name);                   
+                    //const inCart = findItem(plant.name);                   
                     return (
                   <div className="product-card" key={plantIndex}>
                     <img
@@ -382,11 +389,11 @@ function ProductList() {
                     <div className="product-title">{plant.name}</div>
                     {/*Similarly like the above plant.name show other details like description and cost*/}
                     <button
-                      onClick={() => handleAddToCart(plant, index, plantIndex)}
-                      className={inCart ? 'product-button added-to-cart' : 'product-button'}
-                      disabled={inCart}
+                      onClick={() => handleAddToCart(plant)}
+                      className={plant.name in addedToCart && addedToCart[plant.name] === true ? 'product-button added-to-cart' : 'product-button'}
+                      disabled={plant.name in addedToCart && addedToCart[plant.name] === true}
                     >
-                      {inCart ? 'Added to Cart' : 'Add to Cart'}
+                      {plant.name in addedToCart && addedToCart[plant.name] === true ? 'Added to Cart' : 'Add to Cart'}
                     </button>
                   </div>
                     )
@@ -396,7 +403,7 @@ function ProductList() {
           ))}
         </div>
       ) : (
-        <CartItem onContinueShopping={handleContinueShopping} />
+        <CartItem onContinueShopping={handleContinueShopping} onDeletedFromCart={handleOnDeleteFromCart}/>
       )}
     </div>
   );
