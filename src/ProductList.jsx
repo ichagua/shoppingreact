@@ -289,9 +289,6 @@ function ProductList() {
   };
   const [addedToCart, setAddedToCart] = useState({});
   const handleAddToCart = (product, index, plantIndex) => {
-    console.log('product', product);
-    console.log('index', index);
-    console.log('plantIndex', plantIndex);    
     //plantsArray[index].plants[plantIndex].added = true;    
     dispatch(addItem(product));
     setAddedToCart((prevState) => ({
@@ -387,8 +384,9 @@ function ProductList() {
                     <button
                       onClick={() => handleAddToCart(plant, index, plantIndex)}
                       className={inCart ? 'product-button added-to-cart' : 'product-button'}
+                      disabled={inCart}
                     >
-                      Add to Cart
+                      {inCart ? 'Added to Cart' : 'Add to Cart'}
                     </button>
                   </div>
                     )
